@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:interview_studio93/Model/Meals.dart';
 import 'package:interview_studio93/Model/Product.dart';
@@ -15,7 +14,7 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
   int _selectedIndex = -1;
   int _selectedEditIndex = -1;
   List<bool> _editModeList = [];
-  List<Product> _productsToDelete = []; // Temporary list to hold deleted products
+  final List<Product> _productsToDelete = [];
 
   Meals makeMeal(String mealName, List<Product> products, int totalCalories) {
     Meals meals = Meals(mealName, Icons.sunny, products, totalCalories);
@@ -107,13 +106,16 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
     );
   }
 
+  bool shouldMarkForDeletion(Product product) {
+    return _productsToDelete.contains(product);
+  }
+
   Widget listItem(int position, String mealName, IconData iconData, List<Product> products) {
     final isExpanded = position == _selectedIndex;
     final isEditSelected = _selectedEditIndex == position;
     final isEditMode = _editModeList[position];
     return InkWell(
       onTap: () {
-        log("onListItemClicked");
         if (products.isNotEmpty) {
           setState(() {
             _selectedIndex = isExpanded ? -1 : position;
@@ -124,7 +126,6 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
         margin: EdgeInsets.only(
           bottom: position != list.length - 1 ? 5.0 : 0.0,
         ),
-        // padding: const EdgeInsets.all(10.0),
         decoration: const BoxDecoration(
           color: Color(0xFFFFFFFF),
           borderRadius: BorderRadius.all(
@@ -180,7 +181,8 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
                                         "Save",
                                         10.0,
                                         FontWeight.w400,
-                                        const Color(0xFF2F2A25),
+                                        const Color(0xFF94B69E),
+                                        const Color(0xFF94B69E),
                                         1.0,
                                         onTap: () {
                                           setState(() {
@@ -210,6 +212,7 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
                                         "Edit",
                                         10.0,
                                         FontWeight.w400,
+                                        const Color(0xFF2F2A25),
                                         const Color(0xFF2F2A25),
                                         1.0,
                                         onTap: () {
@@ -257,16 +260,15 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
                 ),
                 InkWell(
                   onTap: () {
-                    log("onadd button clicked $position");
-                    if (isExpanded) {
-                      setState(() {
-                        products.add(addDummyProduct());
-                      });
-                    }
+                    // if (isExpanded ||products.isEmpty) {
+                    setState(() {
+                      products.add(addDummyProduct());
+                    });
+                    // }
                   },
                   child: SizedBox(
-                    height: 70.0,
-                    width: 50.0,
+                    height: 75.0,
+                    width: 60.0,
                     child: ClipPath(
                       clipper: const ShapeBorderClipper(
                         shape: RoundedRectangleBorder(
@@ -279,8 +281,8 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
                         ),
                       ),
                       child: Container(
-                        height: 70.0,
-                        width: 200.0,
+                        // height: 70.0,
+                        // width: 230.0,
                         decoration: const BoxDecoration(
                           // color: Colors.orange,
                           border: Border(
@@ -357,9 +359,9 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          const Text(
-                                            "Spicy bacon Cheese Toast",
-                                            style: TextStyle(
+                                          Text(
+                                            "${products[productPosition].productName} ${((shouldMarkForDeletion(products[productPosition])) ? "*" : "")}",
+                                            style: const TextStyle(
                                               fontSize: 15.0,
                                               fontWeight: FontWeight.w400,
                                               color: Color(0xFFBAB6B1),
@@ -423,7 +425,10 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
                                           children: [
                                             const Text(
                                               "Total",
-                                              style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w400, color: Color(0xFF94B69E)),
+                                              style: TextStyle(
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: Color(0xFF94B69E)),
                                             ),
                                             Container(
                                               margin: const EdgeInsets.only(
@@ -459,7 +464,8 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
     );
   }
 
-  Widget editButton(String text, double fontSize, FontWeight fontWeight, Color borderColor, borderWidth, {required Function() onTap}) {
+  Widget editButton(String text, double fontSize, FontWeight fontWeight, Color texColor, Color borderColor, borderWidth,
+      {required Function() onTap}) {
     return InkWell(
       onTap: () {
         onTap();
@@ -485,6 +491,7 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
           style: TextStyle(
             fontSize: fontSize,
             fontWeight: fontWeight,
+            color: texColor,
           ),
         ),
       ),
