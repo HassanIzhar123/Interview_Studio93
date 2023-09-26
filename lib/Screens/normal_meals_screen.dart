@@ -11,11 +11,19 @@ class NormalMealsScreen extends StatefulWidget {
 }
 
 class _NormalMealsScreenState extends State<NormalMealsScreen> {
-  List<Meals> list = [], defaultList = [];
+  List<Meals> list = [];
+  int _selectedIndex = -1;
+  int _selectedEditIndex = -1;
+  List<bool> _editModeList = [];
+  List<Product> _productsToDelete = []; // Temporary list to hold deleted products
 
   Meals makeMeal(String mealName, List<Product> products, int totalCalories) {
     Meals meals = Meals(mealName, Icons.sunny, products, totalCalories);
     return meals;
+  }
+
+  Product addDummyProduct() {
+    return Product("Spicy bacon Cheese Toast", 312);
   }
 
   @override
@@ -45,13 +53,9 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
     // Product product2 = Product("Total", "624 Cals");
     List<Product> products6 = [product6, product7];
     list.add(makeMeal("Meal Six", products6, 0));
-
-    defaultList = list;
+    _editModeList = List.generate(list.length, (index) => false);
     super.initState();
   }
-
-  int _selectedIndex = -1;
-  int _selectedEditIndex = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -79,11 +83,7 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {
-                      setState(() {
-                        list = defaultList;
-                      });
-                    },
+                    onPressed: () {},
                     icon: const Icon(
                       Icons.more_horiz,
                       color: Color(0xFF2F2A25),
@@ -109,17 +109,13 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
 
   Widget listItem(int position, String mealName, IconData iconData, List<Product> products) {
     final isExpanded = position == _selectedIndex;
-    final isSelectedForEdit = position == _selectedEditIndex;
+    final isEditSelected = _selectedEditIndex == position;
+    final isEditMode = _editModeList[position];
     return InkWell(
       onTap: () {
         log("onListItemClicked");
         if (products.isNotEmpty) {
           setState(() {
-            if (isSelectedForEdit) {
-              _selectedEditIndex = -1;
-            } else {
-              _selectedEditIndex = position;
-            }
             _selectedIndex = isExpanded ? -1 : position;
           });
         }
@@ -128,7 +124,7 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
         margin: EdgeInsets.only(
           bottom: position != list.length - 1 ? 5.0 : 0.0,
         ),
-        padding: const EdgeInsets.all(10.0),
+        // padding: const EdgeInsets.all(10.0),
         decoration: const BoxDecoration(
           color: Color(0xFFFFFFFF),
           borderRadius: BorderRadius.all(
@@ -138,87 +134,184 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
         child: Column(
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  height: 70.0,
-                  width: 70.0,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFF1EEE6),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20.0),
-                    ),
-                  ),
-                  child: Icon(iconData),
-                ),
-                const SizedBox(
-                  width: 10.0,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: [
-                    Text(
-                      mealName,
-                      style: const TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w400,
+                    Container(
+                      height: 70.0,
+                      width: 70.0,
+                      margin: const EdgeInsets.only(
+                        left: 10.0,
+                        top: 10.0,
+                        bottom: 10.0,
                       ),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFF1EEE6),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20.0),
+                        ),
+                      ),
+                      child: Icon(iconData),
                     ),
                     const SizedBox(
-                      height: 3.0,
+                      width: 10.0,
                     ),
-                    products.isNotEmpty
-                        ? Row(
-                            children: [
-                              editButton(
-                                "Edit",
-                                10.0,
-                                FontWeight.w400,
-                                const Color(0xFF2F2A25),
-                                1.0,
-                                onTap: () {
-                                  setState(() {
-                                    if (isSelectedForEdit) {
-                                      _selectedEditIndex = -1; // Cancel editing
-                                    } else {
-                                      _selectedEditIndex = position; // Start editing
-                                    }
-                                  });
-                                },
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          mealName,
+                          style: const TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 3.0,
+                        ),
+                        products.isNotEmpty
+                            ? isEditMode
+                                ? Row(
+                                    children: [
+                                      editButton(
+                                        "Save",
+                                        10.0,
+                                        FontWeight.w400,
+                                        const Color(0xFF2F2A25),
+                                        1.0,
+                                        onTap: () {
+                                          setState(() {
+                                            // Remove products marked for deletion
+                                            for (Product product in _productsToDelete) {
+                                              products.remove(product);
+                                            }
+                                            _editModeList[position] = false;
+                                            _selectedEditIndex = -1; // Clear edit mode
+                                            _productsToDelete.clear();
+                                          });
+                                        },
+                                      ),
+                                      const SizedBox(
+                                        width: 5.0,
+                                      ),
+                                      const Icon(
+                                        Icons.favorite_border,
+                                        size: 18.0,
+                                        color: Color(0xFF2F2A25),
+                                      ),
+                                    ],
+                                  )
+                                : Row(
+                                    children: [
+                                      editButton(
+                                        "Edit",
+                                        10.0,
+                                        FontWeight.w400,
+                                        const Color(0xFF2F2A25),
+                                        1.0,
+                                        onTap: () {
+                                          setState(() {
+                                            _selectedEditIndex = position;
+                                            _editModeList[position] = true;
+                                          });
+                                        },
+                                      ),
+                                      const SizedBox(
+                                        width: 5.0,
+                                      ),
+                                      const Icon(
+                                        Icons.favorite_border,
+                                        size: 18.0,
+                                        color: Color(0xFF2F2A25),
+                                      ),
+                                    ],
+                                  )
+                            : Container(
+                                padding: const EdgeInsets.only(
+                                  left: 10.0,
+                                  right: 10.0,
+                                  top: 1.0,
+                                  bottom: 1.0,
+                                ),
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFFA8A4A0),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(15.0),
+                                  ),
+                                ),
+                                child: const Text(
+                                  "No Products",
+                                  style: TextStyle(
+                                    fontSize: 10.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: Color(0xFFffffff),
+                                  ),
+                                ),
                               ),
-                              const SizedBox(
-                                width: 5.0,
-                              ),
-                              const Icon(
-                                Icons.favorite_border,
-                                size: 18.0,
-                                color: Color(0xFF2F2A25),
-                              ),
-                            ],
-                          )
-                        : Container(
-                            padding: const EdgeInsets.only(
-                              left: 10.0,
-                              right: 10.0,
-                              top: 1.0,
-                              bottom: 1.0,
+                      ],
+                    ),
+                  ],
+                ),
+                InkWell(
+                  onTap: () {
+                    log("onadd button clicked $position");
+                    if (isExpanded) {
+                      setState(() {
+                        products.add(addDummyProduct());
+                      });
+                    }
+                  },
+                  child: SizedBox(
+                    height: 70.0,
+                    width: 50.0,
+                    child: ClipPath(
+                      clipper: const ShapeBorderClipper(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(5.0),
+                            topRight: Radius.circular(20.0),
+                            bottomLeft: Radius.circular(5.0),
+                            bottomRight: Radius.circular(5.0),
+                          ),
+                        ),
+                      ),
+                      child: Container(
+                        height: 70.0,
+                        width: 200.0,
+                        decoration: const BoxDecoration(
+                          // color: Colors.orange,
+                          border: Border(
+                            left: BorderSide(
+                              color: Color(0xFFF1EEE6),
+                              width: 5.0,
                             ),
-                            decoration: const BoxDecoration(
-                              color: Color(0xFFA8A4A0),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(15.0),
-                              ),
-                            ),
-                            child: const Text(
-                              "No Products",
-                              style: TextStyle(
-                                fontSize: 10.0,
-                                fontWeight: FontWeight.w400,
-                                color: Color(0xFFffffff),
-                              ),
+                            bottom: BorderSide(
+                              color: Color(0xFFF1EEE6),
+                              width: 5.0,
                             ),
                           ),
-                  ],
+                        ),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF302A25),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(5.0),
+                              topRight: Radius.circular(20.0),
+                              bottomLeft: Radius.circular(5.0),
+                              bottomRight: Radius.circular(5.0),
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -231,6 +324,11 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
                             height: 10.0,
                           ),
                           Container(
+                            margin: const EdgeInsets.only(
+                              left: 10.0,
+                              right: 10.0,
+                              bottom: 10.0,
+                            ),
                             padding: const EdgeInsets.only(
                               left: 10.0,
                               right: 10.0,
@@ -282,7 +380,7 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
                                               const SizedBox(
                                                 width: 5.0,
                                               ),
-                                              isSelectedForEdit
+                                              !isEditSelected
                                                   ? IconButton(
                                                       padding: EdgeInsets.zero,
                                                       constraints: const BoxConstraints(),
@@ -297,7 +395,7 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
                                                       constraints: const BoxConstraints(),
                                                       onPressed: () {
                                                         setState(() {
-                                                          products.removeAt(productPosition);
+                                                          _productsToDelete.add(products[productPosition]);
                                                         });
                                                       },
                                                       icon: const Icon(
@@ -325,17 +423,14 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
                                           children: [
                                             const Text(
                                               "Total",
-                                              style: TextStyle(
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Color(0xFF94B69E)),
+                                              style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w400, color: Color(0xFF94B69E)),
                                             ),
                                             Container(
                                               margin: const EdgeInsets.only(
                                                 right: 30.0,
                                               ),
                                               child: Text(
-                                                getAllProductsCalories(products).toString(),
+                                                "${getAllProductsCalories(products).toInt().toString()} Cals",
                                                 style: const TextStyle(
                                                   fontSize: 15.0,
                                                   fontWeight: FontWeight.w400,
@@ -364,8 +459,7 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
     );
   }
 
-  Widget editButton(String text, double fontSize, FontWeight fontWeight, Color borderColor, borderWidth,
-      {required Function() onTap}) {
+  Widget editButton(String text, double fontSize, FontWeight fontWeight, Color borderColor, borderWidth, {required Function() onTap}) {
     return InkWell(
       onTap: () {
         onTap();

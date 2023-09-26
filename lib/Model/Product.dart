@@ -1,5 +1,6 @@
 class Product {
   String productName;
+  bool toBeDeleted = false;
 
   @override
   String toString() {
