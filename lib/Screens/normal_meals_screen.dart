@@ -284,18 +284,32 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
                       ),
                       child: Container(
                         decoration: const BoxDecoration(
-                          boxShadow: [BoxShadow(color: Colors.green, spreadRadius: 3)],
-                          color: Color(0xFF302A25),
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(5.0),
-                            topRight: Radius.circular(20.0),
-                            bottomLeft: Radius.circular(5.0),
-                            bottomRight: Radius.circular(5.0),
+                          // color: Colors.orange,
+                          border: Border(
+                            left: BorderSide(
+                              color: Color(0xFFF1EEE6),
+                              width: 5.0,
+                            ),
+                            bottom: BorderSide(
+                              color: Color(0xFFF1EEE6),
+                              width: 5.0,
+                            ),
                           ),
                         ),
-                        child: const Icon(
-                          Icons.add,
-                          color: Colors.white,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF302A25),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(5.0),
+                              topRight: Radius.circular(20.0),
+                              bottomLeft: Radius.circular(5.0),
+                              bottomRight: Radius.circular(5.0),
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
