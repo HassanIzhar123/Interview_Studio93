@@ -52,6 +52,10 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
     // Product product2 = Product("Total", "624 Cals");
     List<Product> products6 = [product6, product7];
     list.add(makeMeal("Meal Six", products6, 0));
+
+    list.add(makeMeal("Meal Seven", products6, 0));
+    list.add(makeMeal("Meal Six", products6, 0));
+
     _editModeList = List.generate(list.length, (index) => false);
     super.initState();
   }
@@ -260,11 +264,9 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
                 ),
                 InkWell(
                   onTap: () {
-                    // if (isExpanded ||products.isEmpty) {
                     setState(() {
                       products.add(addDummyProduct());
                     });
-                    // }
                   },
                   child: SizedBox(
                     height: 75.0,
@@ -281,35 +283,19 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
                         ),
                       ),
                       child: Container(
-                        // height: 70.0,
-                        // width: 230.0,
                         decoration: const BoxDecoration(
-                          // color: Colors.orange,
-                          border: Border(
-                            left: BorderSide(
-                              color: Color(0xFFF1EEE6),
-                              width: 5.0,
-                            ),
-                            bottom: BorderSide(
-                              color: Color(0xFFF1EEE6),
-                              width: 5.0,
-                            ),
+                          boxShadow: [BoxShadow(color: Colors.green, spreadRadius: 3)],
+                          color: Color(0xFF302A25),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(5.0),
+                            topRight: Radius.circular(20.0),
+                            bottomLeft: Radius.circular(5.0),
+                            bottomRight: Radius.circular(5.0),
                           ),
                         ),
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: Color(0xFF302A25),
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(5.0),
-                              topRight: Radius.circular(20.0),
-                              bottomLeft: Radius.circular(5.0),
-                              bottomRight: Radius.circular(5.0),
-                            ),
-                          ),
-                          child: const Icon(
-                            Icons.add,
-                            color: Colors.white,
-                          ),
+                        child: const Icon(
+                          Icons.add,
+                          color: Colors.white,
                         ),
                       ),
                     ),
@@ -346,6 +332,7 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
                                   topRight: Radius.circular(10.0),
                                 )),
                             child: ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemBuilder: (context, productPosition) {
                                 return Column(
@@ -425,10 +412,7 @@ class _NormalMealsScreenState extends State<NormalMealsScreen> {
                                           children: [
                                             const Text(
                                               "Total",
-                                              style: TextStyle(
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Color(0xFF94B69E)),
+                                              style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w400, color: Color(0xFF94B69E)),
                                             ),
                                             Container(
                                               margin: const EdgeInsets.only(
