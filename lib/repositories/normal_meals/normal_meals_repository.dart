@@ -29,85 +29,10 @@ class NormalMealsRepository extends BaseRepository {
     list.add(_makeMeal("Meal Five", [], 0));
 
     //meal 6
-    Product product6 = Product("Spicy bacon Cheese Toast1", 60);
-    Product product7 = Product("Almond Milk2", 500);
-    List<Product> products6 = [product6, product7];
+    List<Product> products6 = [Product("Spicy bacon Cheese Toast1", 60), Product("Almond Milk2", 500)];
     list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Seven", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
-    list.add(_makeMeal("Meal Six", products6, 0));
+    List<Product> products7 = [Product("Spicy bacon Cheese Toast1", 60), Product("Almond Milk2", 500)];
+    list.add(_makeMeal("Meal Seven", products7, 0));
     return list;
   }
 
@@ -125,5 +50,4 @@ class NormalMealsRepository extends BaseRepository {
   Product _addDummyProduct() {
     return Product("Spicy bacon Cheese Toast", 312);
   }
-
 }
